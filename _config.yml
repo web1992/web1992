@@ -12,6 +12,6 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://web1992.cn" # the base hostname & protocol for your site
 #twitter_username: web1992
 github_username:  web1992
-description: 京ICP备15055486号
+description: "京ICP备15055486号<br /> jekyll 3.0.1"
 # Build settings
 markdown: kramdown
