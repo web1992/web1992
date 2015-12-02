@@ -29,3 +29,20 @@ permalink: /arichive/
   {% endif %}
 </div>
 {% endif %}
+
+  <ul class="post-list">
+    <!-- where the tag is git pages-->
+     {% for cat in site.categories %}
+	  <!--
+		<li class="listing-seperator" id="{{ cat[0] }}">{{ cat[0] }} ({{ cat[1].size }})</li>
+	  -->
+	<tags class='tag'>{{ cat[0] }} ({{ cat[1].size }})</tags>
+	{% for post in site.posts %}
+		{% if  post.tags[0] ==  cat[0] %}
+        		 <a class="post-link" href="{{ post.url | prepend: site.baseurl }}"> 
+				 <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}:</span> {{ post.title }}
+			 </a>		
+		{% endif %}
+        {% endfor %}
+    {% endfor %}
+ </ul>
