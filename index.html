@@ -11,10 +11,10 @@ layout: default
       <li>
         <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-        <h5>
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>  
-	 <tags class='tag'>{{post.tags}}</tags>
-        </h5>
+	 <span class="label label-zan">
+	 <tags class='fa fa-tags'>{{post.tags}}</tags>
+         </span>
       </li>
     {% endfor %}
   </ul>

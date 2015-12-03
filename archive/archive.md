@@ -36,7 +36,9 @@ permalink: /arichive/
 	  <!--
 		<li class="listing-seperator" id="{{ cat[0] }}">{{ cat[0] }} ({{ cat[1].size }})</li>
 	  -->
-	<tags class='tag'>{{ cat[0] }} ({{ cat[1].size }})</tags>
+        <span class="label label-zan">
+	<tags class='fa fa-tags'>{{ cat[0] }} ({{ cat[1].size }})</tags>
+	</span>
 	{% for post in site.posts %}
 		{% if  post.tags[0] ==  cat[0] %}
         		 <a class="post-link" href="{{ post.url | prepend: site.baseurl }}"> 
