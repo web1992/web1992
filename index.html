@@ -9,12 +9,11 @@ layout: default
   <ul class="post-list">
     {% for post in site.posts %}
       <li>
-        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
-
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>  
-	 <span class="label label-zan">
-	 <tags class='fa fa-tags'>{{post.tags}}</tags>
-         </span>
+        <span class="fa fa-calendar post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>  
+	<span class="label label-zan">
+	 	<tags class='fa fa-tags'>{{post.tags}}</tags>
+        </span>
       </li>
     {% endfor %}
   </ul>
