@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "linux 查找命令"
+title:  "linux grep cat 查找命令"
 date:  2015-12-04 22:37:00 +0800
 categories: linux
 tags: linux
