@@ -209,7 +209,12 @@
 }
 
 .post-title {
-    font-size: 42px;
+    background-color:#F7F7F7;
+    border-left:3px solid #449FE6;
+    color:#33363B;
+    font-weight:normal;
+    padding:5px 0 5px 15px;
+    font-size: 25px;
     letter-spacing: -1px;
     line-height: 1;
 
@@ -217,6 +222,7 @@
         font-size: 36px;
     }
 }
+
 
 .post-content {
     margin-bottom: $spacing-unit;
