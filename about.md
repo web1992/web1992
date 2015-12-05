@@ -10,3 +10,5 @@ Desc:`a java coder.` <br/>
 
 You can find my github page at
 {% include icon-github.html username="web1992" %}
+{% include duoshuo.html %}
+

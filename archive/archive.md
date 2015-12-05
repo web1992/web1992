@@ -48,3 +48,5 @@ permalink: /arichive/
         {% endfor %}
     {% endfor %}
  </ul>
+
+{% include duoshuo.html %}
