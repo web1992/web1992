@@ -8,7 +8,7 @@ keywords: web1992,Java, Linux, GitHub, Jekyll, Plugins, Works, Archives, css, ht
   <h1 class="page-heading">Posts</h1>
 
   <ul class="post-list">
-    {% for post in site.posts %}
+    {% for post in paginator.posts  %}
       <li>
         <span class="fa fa-calendar post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
         <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>  
@@ -18,7 +18,58 @@ keywords: web1992,Java, Linux, GitHub, Jekyll, Plugins, Works, Archives, css, ht
       </li>
     {% endfor %}
   </ul>
-
+<div class="pagination">
+			<ul>
+			{% if paginator.previous_page %}
+					{% if paginator.previous_page == 1 %}
+					<li>
+							<a href="/">&laquo; Previous</a>
+					</li>
+					{% else %}
+					<li>
+							<a href="/page{{ paginator.previous_page }}">&laquo; Previous</a>
+					</li>
+					{% endif %}
+			{% else %}
+					<li class="disabled">
+							<a>&laquo; Previous</a>
+					</li>
+			{% endif %}
+		
+			{% if paginator.page == 1 %}
+					<li class="active">
+							<a>1</a>
+					</li>
+			{% else %}
+					<li>
+							<a href="/">1</a>
+					</li>
+			{% endif %}
+				
+			{% for count in (2..paginator.total_pages) %}
+					{% if count == paginator.page %}
+							<li class="active">
+									<a>{{count}}</a>
+							</li>
+					{% else %}
+							<li>
+									<a href="/page{{count}}">{{count}}</a>
+							</li>
+					{% endif %}
+			{% endfor %}
+		
+			{% if paginator.next_page %}
+					<li>
+							<a href="/page{{paginator.next_page}}">Next &raquo;</a>
+					</li>
+			{% else %}
+					<li class="disabled">
+							<a>Next &raquo;</a>
+					</li>
+			{% endif %}
+			</ul>
+</div>
+ <!-- 
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
+ -->
 </div>
