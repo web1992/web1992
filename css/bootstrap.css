@@ -1646,6 +1646,13 @@ label {
   margin-bottom: 5px;
   font-weight: bold;
 }
+.label:hover,
+.label:focus {
+  color: #ffffff;
+  background: #d9534f;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 input[type="search"] {
   -webkit-box-sizing: border-box;

@@ -108,6 +108,19 @@ a {
     }
 }
 
+a{
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #3498db;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #3498db;
+}
 
 
 /**
