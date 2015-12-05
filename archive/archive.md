@@ -42,7 +42,7 @@ permalink: /arichive/
 	{% for post in site.posts %}
 		{% if  post.tags[0] ==  cat[0] %}
         		 <a class="post-link" href="{{ post.url | prepend: site.baseurl }}"> 
-				 <span class="fa fa-calendar post-meta">{{ post.date | date: "%Y-%m-%d" }}:</span> {{ post.title }}
+				 <span class="fa fa-calendar post-meta">{{ post.date | date: "%Y-%m-%d" }}&raquo;</span> {{ post.title }}
 			 </a>		
 		{% endif %}
         {% endfor %}
