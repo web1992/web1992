@@ -18,7 +18,7 @@ description: "京ICP备15055486号<br />
 # Build settings
 markdown: kramdown
 #分页信息 begin
-paginate: 5
+paginate: 10
 gems: [jekyll-paginate]
 paginate_path: "page:num"
 #分页信息 end
