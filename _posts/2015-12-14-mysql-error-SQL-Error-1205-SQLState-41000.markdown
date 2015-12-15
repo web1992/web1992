@@ -7,7 +7,7 @@ tags: mysql
 keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
 ---
 
-> 今天再使用服务器连接 `mysql` 出现如下的错误（上午还可以使用，下午就不用使用）
+> 今天在使用程序连接 `mysql` 出现如下的错误（上午还可以使用，下午就出问题了）
 > 
 > 日志：
 
@@ -59,7 +59,7 @@ keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
     28M windows
     28K windows_build.xml
 
-> 删除无用的过大文件即
+> 删除无用的过大文件即可
 
 
 
