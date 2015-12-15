@@ -49,7 +49,8 @@ keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
 > 这里登陆服务器，查找问题，发现 `linux` 的磁盘满了，
 >
 > 通过下面命令
-    
+
+{% highlight sh linenos %}    
     #显示磁盘信息
     df -h
     #进入 `data` 文件目录下面，查询每个文件夹的大小
@@ -58,8 +59,8 @@ keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
     
     28M windows
     28K windows_build.xml
-	...
-
+    ...
+{% endhighlight %}
 > 删除无用的过大文件即可
 
 
