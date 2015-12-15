@@ -51,13 +51,14 @@ keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
 > 通过下面命令
     
     #显示磁盘信息
-    df -sh
+    df -h
     #进入 `data` 文件目录下面，查询每个文件夹的大小
     cd /data/
     du -sh *
     
     28M windows
     28K windows_build.xml
+	...
 
 > 删除无用的过大文件即可
 
