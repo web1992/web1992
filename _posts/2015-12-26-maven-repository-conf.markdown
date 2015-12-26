@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "maven repository confg (maven 的仓库配置)"
+title:  "maven repository config (maven 的仓库配置)"
 date:  2015-12-26 23:41:00 +0800
 categories: maven
 tags: maven
@@ -8,7 +8,7 @@ keywords: maven,Jekyll,web1992
 ---
 
 
-> maven repository confg (maven 的仓库配置)
+> maven repository config (maven 的仓库配置)
 
 {% highlight xml %}   
 <?xml version="1.0" encoding="UTF-8"?>
@@ -71,7 +71,6 @@ keywords: maven,Jekyll,web1992
 <!-- <activeProfile>nexus</activeProfile>
  -->
 </activeProfiles>
-
 
 {% endhighlight %}
 
