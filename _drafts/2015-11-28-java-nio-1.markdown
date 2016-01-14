@@ -25,5 +25,64 @@ categories: java
 - 并发性能
 
 
+商战的消息通信实现概要
+----------
+1，服务器建立
+
+>org.apache.mina.transport.socket.nio.NioSocketAcceptor
+>
+![](http://i.imgur.com/YT9UPHl.png)
+
+2，接受数据 
+>BaseIoHandler messageIoHandler;
+
+![](http://i.imgur.com/Qjlbmlz.png)
+
+3，解析(识别)数据
+
+![](http://i.imgur.com/BUa9jmS.png)
+
+>BaseMessageRecognizer
+
+![](http://i.imgur.com/RFlzRjo.png)
+
+>ClientMessageRecognizer
+
+![](http://i.imgur.com/A6HmWOw.png)
+
+
+>read
+
+![](http://i.imgur.com/Nd1AreL.png)
+
+>readImpl
+
+![](http://i.imgur.com/7WJtcjx.png)
+
+4，数据封装
+
+![](http://i.imgur.com/8Qczaj0.png)
+
+5，add消息到消息队列
+
+![](http://i.imgur.com/pLqNASB.png)
+
+
+6，发送数据
+>GameEncoder
+
+![](http://i.imgur.com/YeFqhoC.png)
+
+>msg write
+
+![](http://i.imgur.com/jp0Dge8.png)
+
+>msg writeimpl
+
+![](http://i.imgur.com/wACgyGG.png)
+
+![](http://i.imgur.com/qJsQSPd.png)
+
+
 
 
