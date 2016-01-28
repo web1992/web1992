@@ -21,6 +21,7 @@ keywords: apache, Linux,Jekyll,web1992
 
 {% highlight xml linenos %}    
 
+NameVirtualHost 127.0.0.1
 	<VirtualHost *:81>
 	        ServerName  %0
 	        UseCanonicalName Off
