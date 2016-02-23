@@ -9,7 +9,7 @@
 title: er妞的博客
 email: erxiaoniu@gmail.com
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://web1992.cn" # the base hostname & protocol for your site
+url: "web1992.github.io" # the base hostname & protocol for your site
 #twitter_username: web1992
 github_username:  web1992
 description: "京ICP备15055486号<br /> 
