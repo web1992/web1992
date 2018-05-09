@@ -21,5 +21,4 @@ permalink: /arichive/
         {% endfor %}
     {% endfor %}
  </ul>
- {% include share.html duoshuo_title=page.title  duoshuo_url=page.url duoshuo_content=page.excerpt %}
- {% include duoshuo.html duoshuo_title=page.title  duoshuo_url=page.url %}
+
