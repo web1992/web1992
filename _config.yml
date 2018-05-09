@@ -8,7 +8,7 @@
 # Site settings
 title: er的博客
 email: erxiaoniu@gmail.com
-baseurl: "/blog" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "web1992.github.io" # the base hostname & protocol for your site
 #twitter_username: web1992
 github_username:  web1992
