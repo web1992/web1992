@@ -16,8 +16,8 @@ keywords: mysql,Jekyll,web1992
 > 
 > 在脚本的开始添加如下代码：
 
-{% highlight sql %}   
+```sql   
 SET CHARACTER_SET_CLIENT=utf8;
 SET CHARACTER_SET_CONNECTION=utf8;
-{% endhighlight %}
+```
 

@@ -10,7 +10,7 @@ keywords: ant,Jekyll,web1992
 
 > ant jar 
 
-{% highlight xml %}   
+```xml   
 <!--ant_project public define-->
 <property name="ant_project.project.name" value="ant_project" />
 <property name="ant_project.bin" value="../${ant_project.project.name}/bin" />
@@ -22,5 +22,5 @@ keywords: ant,Jekyll,web1992
 	<!-- 把 ${ant_project.bin} 打包到 ${weblib.dir} 目录下，名称是为 ant_project.jar   -->
 	<jar destfile="生成jar包" jarfile="${weblib.dir}/${ant_project.jarName}" basedir="${ant_project.bin}"></jar>
 </target>
-{% endhighlight %}
+```
 

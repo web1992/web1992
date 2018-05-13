@@ -50,7 +50,7 @@ keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
 >
 > 通过下面命令
 
-{% highlight sh linenos %}    
+```sh   
     #显示磁盘信息
     df -h
     #进入 `data` 文件目录下面，查询每个文件夹的大小
@@ -60,7 +60,7 @@ keywords: mysql, Linux,Jekyll,web1992,APPARENT DEADLOCK
     28M windows
     28K windows_build.xml
     ...
-{% endhighlight %}
+```
 > 删除无用的过大文件即可
 
 

@@ -9,8 +9,7 @@ keywords: maven,Jekyll,web1992
 
 
 > maven repository config (maven 的仓库配置)
-
-{% highlight xml %}   
+  
 <?xml version="1.0" encoding="UTF-8"?>
 <!--0 仓库的配置在 profiles 标签下进行配置-->
 <!--1 需要指定仓库的ID-->
@@ -18,6 +17,7 @@ keywords: maven,Jekyll,web1992
 <!--3 仓库依赖地址-->
 <!--4 插件仓库地址-->
 <!--5 激活仓库的配置-->
+```xml
 <profiles>
     <profile>
         <id>nexus</id>
@@ -71,6 +71,5 @@ keywords: maven,Jekyll,web1992
 <!-- <activeProfile>nexus</activeProfile>
  -->
 </activeProfiles>
-
-{% endhighlight %}
+```
 
