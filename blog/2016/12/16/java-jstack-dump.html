@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>java jstack dump log 分析 · web1992&#x27;s blog</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## java jstack dump log 分析记录"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="java jstack dump log 分析 · web1992&#x27;s blog"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/blog/2016/12/16/java-jstack-dump.html"/><meta property="og:description" content="## java jstack dump log 分析记录"/><meta property="og:image" content="https://your-docusaurus-test-site.com/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/img/docusaurus.png"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs2015.min.css"/><link rel="alternate" type="application/atom+xml" href="https://your-docusaurus-test-site.com/blog/atom.xml" title="web1992&#x27;s blog Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://your-docusaurus-test-site.com/blog/feed.xml" title="web1992&#x27;s blog Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/docusaurus.svg" alt="web1992&#x27;s blog"/><h2 class="headerTitleWithLogo">web1992&#x27;s blog</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="/about.html" target="_self">About</a></li><li class=""><a href="https://github.com/web1992" target="_self">GitHub</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2018/09/11/thread-pool-executor.html">ThreadPoolExecutor 使用</a></li><li class="navListItem"><a class="navItem" href="/blog/2018/07/16/java-collection-map.html">Map collections in java</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/11/23/checked-vs-unchecked-exceptions-in-java.html">Checked vs Unchecked Exceptions in Java</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/11/09/jvm-file-encoding.html">jvm 中文乱码的问题</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/03/22/code-review.html">工程checkList</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/02/16/my-2016.html">我的2016</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/29/java-SimpleDateFormat.html">java SimpleDateFormat 线程不安全分析</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/20/java-key-condition.html">java Condition</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2016/12/16/java-jstack-dump.html">java jstack dump log 分析</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/14/java7-try-resource.html">java7-try-resource</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/11/29/java-jdk.html">java jdk</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/11/03/idea-live-template.html">idea code 模板</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/10/08/mysql-replication.html">mysql replication-主从复制</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/09/27/spring-init.html">spring mvc  DispatcherServlet ContextLoaderListener</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/09/20/linux-curl.html">linux curl 命令</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/09/01/nginx-ssl.html">blog 开启https </a></li><li class="navListItem"><a class="navItem" href="/blog/2016/08/29/java-design-patterns.html">java 设计模式总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/08/18/java-8.html">java 8 总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/07/26/tomcat-server-xml-conf.html">tomcat 配置</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/05/28/linux-screen.html">linux screen</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2016/12/16/java-jstack-dump.html">java jstack dump log 分析</a></h1><p class="post-meta">December 16, 2016</p><div class="authorBlock"></div></header><div><span><h2><a class="anchor" aria-hidden="true" id="java-jstack-dump-log-分析记录"></a><a href="#java-jstack-dump-log-分析记录" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java jstack dump log 分析记录</h2>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="问题描述"></a><a href="#问题描述" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>问题描述</h2>
+<p>在一次开发中，出现了前端调用 http 接口无法响应的问题</p>
+<p>（重启可以解决现在的问题，但是在运行一段时间之后，此接口依然会失去响应，产生假死的现象）</p>
+<p>其他接口都可以正常的调用，除了这个接口（这里称这个接口叫做 A 接口）</p>
+<h2><a class="anchor" aria-hidden="true" id="排除死循环"></a><a href="#排除死循环" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>排除死循环</h2>
+<p>根据经验分析<code>有可能是A接口代码死循环导致的</code>（查询代码流，排除此项可能）</p>
+<h2><a class="anchor" aria-hidden="true" id="排除死锁"></a><a href="#排除死锁" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>排除死锁</h2>
+<p>代码业务简单，没有用到锁相关的技术（排除此项可能）</p>
+<h2><a class="anchor" aria-hidden="true" id="redis"></a><a href="#redis" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>redis</h2>
+<p>分析此接口 A 与其他代码的不同的地方，就是用了<code>redis</code> 缓存，此时依然不知道<code>redis</code>哪里出了问题</p>
+<p>暂时定位问题在<code>redis</code>,继续跟踪<code>redis</code>哪里出现了问题</p>
+<p>接下来就需要分析 java 进程中，线程的状态了。不然很难确定问题所在</p>
+<h2><a class="anchor" aria-hidden="true" id="使用-jstack-命令"></a><a href="#使用-jstack-命令" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>使用<code>jstack</code> 命令</h2>
+<pre><code class="hljs css language-sh">    jstack -l 9532&gt;java_thread_dump.log
+
+    <span class="hljs-comment">#9532 为java进程的ID</span>
+</code></pre>
+<p><a href="http://www.cnblogs.com/nexiyi/p/java_thread_jstack.html">jstack 命令用法</a></p>
+<p>此命令可以打印出<code>9532</code>进程中，所有的线程的状态,日志文件在这里可以找到: <a href="https://web1992.cn/blog/assets/java_thread_dump.log" title="日志">jstack 的日志</a></p>
+<p>项目采用 spring mvc 作为控制层，http 的入口都是 Controller，所以我先统计下 Controller 在 jstack dump 日志中出现的次数</p>
+<pre><code class="hljs css language-sh">    cat java_thread_dump.log |grep Controller |uniq -c
+</code></pre>
+<p>出现以下结果：</p>
+<pre><code class="hljs">40  at com.ejavashop.web.rest.order.controller.OrderRestController.submitOrder(OrderRestController.java:138)
+</code></pre>
+<p>可以看到这个控制器出现了 40 次！！！！</p>
+<pre><code class="hljs css language-java">        - parking to wait <span class="hljs-keyword">for</span>  &lt;<span class="hljs-number">0x0000000088b715a8</span>&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:<span class="hljs-number">175</span>)
+        at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:<span class="hljs-number">2039</span>)
+        at org.apache.commons.pool2.impl.LinkedBlockingDeque.takeFirst(LinkedBlockingDeque.java:<span class="hljs-number">524</span>)
+        at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:<span class="hljs-number">438</span>)
+        at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:<span class="hljs-number">361</span>)
+        at redis.clients.util.Pool.getResource(Pool.java:<span class="hljs-number">49</span>)
+        at org.near.jedisx.pool.ShardedJedisSentinelPool.getResource(ShardedJedisSentinelPool.java:<span class="hljs-number">131</span>)
+        at com.ejavashop.model.order.OrdersModel.getOrderSn(OrdersModel.java:<span class="hljs-number">2511</span>)
+        at com.ejavashop.model.order.OrdersModel.saveOrderInfo(OrdersModel.java:<span class="hljs-number">1438</span>)
+        at com.ejavashop.model.order.OrdersModel.orderCommit(OrdersModel.java:<span class="hljs-number">1092</span>)
+        at com.ejavashop.service.impl.order.OrdersServiceImpl.orderCommitRest(OrdersServiceImpl.java:<span class="hljs-number">330</span>)
+        at com.biz.shard.manager.order.impl.OrderManagerImpl.submitOrder(OrderManagerImpl.java:<span class="hljs-number">348</span>)
+        at com.ejavashop.web.rest.order.controller.OrderRestController.submitOrder(OrderRestController.java:<span class="hljs-number">138</span>)
+</code></pre>
+<p>继续追踪堆栈信息,发现了这一行代码</p>
+<pre><code class="hljs css language-java">    at org.apache.commons.pool2.impl.LinkedBlockingDeque.takeFirst(LinkedBlockingDeque.java:<span class="hljs-number">524</span>)
+</code></pre>
+<p>分析所有等待的线程</p>
+<pre><code class="hljs css language-sh">cat java_thread_dump.log |grep <span class="hljs-string">"parking to wait for"</span> |uniq -c
+</code></pre>
+<p>结果:</p>
+<pre><code class="hljs css language-java"><span class="hljs-number">40</span>  - parking to wait <span class="hljs-keyword">for</span>  &lt;<span class="hljs-number">0x0000000088b715a8</span>&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+</code></pre>
+<p><code>LinkedBlockingDeque</code> 队列，阻塞队列！！！，很有可能是这个队列一直在阻塞，等待获取资源</p>
+<p>回头继续查看代码，原来<code>redis</code>资源用了阻塞队列，把资源放在<code>队列</code>中进行获取资源，如果资源获取不到，就一直阻塞到有资源为止</p>
+<blockquote>
+<p>(redis 在项目里面作为缓存使用，基于 j-redis 开发的 java API)</p>
+</blockquote>
+<p>继续思考队列中的资源去哪里了，分析代码之后，redis 的资源在 take 之后，需要手动的把资源放回队列中，不然使用过之后的资源无法回收</p>
+<p>新的线程也无法从队列中获取新的资源，导致新来的线程一直阻塞</p>
+<p>问题最终确定！！！</p>
+<h2><a class="anchor" aria-hidden="true" id="解决问题"></a><a href="#解决问题" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>解决问题</h2>
+<p>分析代码 redis 的资源释放回收，是通过 close 进行释放的，在应用代码中，没有调用 close 方法，导致此问题的发生。</p>
+<p>在代码中调用 close 方法即可.</p>
+<h2><a class="anchor" aria-hidden="true" id="小结"></a><a href="#小结" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>小结</h2>
+<ul>
+<li>1 问题的的解决，仅仅添加了一行代码，而问题的查找过程确是十分的复杂的</li>
+<li>2 问题现象&gt;定位（分析）问题 log&gt; 分析代码+log &gt;确定问题&gt;解决问题</li>
+<li>3 项目没有使用文档，都是复制别人的代码，在复制别人的代码，遗漏了 close 方法(认真啊)</li>
+<li>4 java 中的资源大多数都需要自动关闭的，例如：IO 流,数据库连接，stock 连接等等，后续使用需要注意</li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#java-jstack-dump-log-分析记录">java jstack dump log 分析记录</a></li><li><a href="#问题描述">问题描述</a></li><li><a href="#排除死循环">排除死循环</a></li><li><a href="#排除死锁">排除死锁</a></li><li><a href="#redis">redis</a></li><li><a href="#使用-jstack-命令">使用<code>jstack</code> 命令</a></li><li><a href="#解决问题">解决问题</a></li><li><a href="#小结">小结</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/docusaurus.svg" alt="web1992&#x27;s blog" width="66" height="58"/></a><div><h5>Links</h5><a href="https://docusaurus.io/">docusaurus</a></div><div><h5>More</h5><a href="/blog">Blog</a><a href="https://github.com/web1992">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://docusaurus.io/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 京ICP备15055486号</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: 'a531c94473320aaf6ccf8924c4835d13',
+                indexName: 'web1992',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {}
+              });
+            </script></body></html>

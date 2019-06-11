@@ -1,0 +1,351 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>java classloader · web1992&#x27;s blog</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## java 中类加载器的使用"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="java classloader · web1992&#x27;s blog"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/blog/2016/03/06/class-loader.html"/><meta property="og:description" content="## java 中类加载器的使用"/><meta property="og:image" content="https://your-docusaurus-test-site.com/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/img/docusaurus.png"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs2015.min.css"/><link rel="alternate" type="application/atom+xml" href="https://your-docusaurus-test-site.com/blog/atom.xml" title="web1992&#x27;s blog Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://your-docusaurus-test-site.com/blog/feed.xml" title="web1992&#x27;s blog Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/docusaurus.svg" alt="web1992&#x27;s blog"/><h2 class="headerTitleWithLogo">web1992&#x27;s blog</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/blog/" target="_self">Blog</a></li><li class=""><a href="/about.html" target="_self">About</a></li><li class=""><a href="https://github.com/web1992" target="_self">GitHub</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2018/09/11/thread-pool-executor.html">ThreadPoolExecutor 使用</a></li><li class="navListItem"><a class="navItem" href="/blog/2018/07/16/java-collection-map.html">Map collections in java</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/11/23/checked-vs-unchecked-exceptions-in-java.html">Checked vs Unchecked Exceptions in Java</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/11/09/jvm-file-encoding.html">jvm 中文乱码的问题</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/03/22/code-review.html">工程checkList</a></li><li class="navListItem"><a class="navItem" href="/blog/2017/02/16/my-2016.html">我的2016</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/29/java-SimpleDateFormat.html">java SimpleDateFormat 线程不安全分析</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/20/java-key-condition.html">java Condition</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/16/java-jstack-dump.html">java jstack dump log 分析</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/12/14/java7-try-resource.html">java7-try-resource</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/11/29/java-jdk.html">java jdk</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/11/03/idea-live-template.html">idea code 模板</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/10/08/mysql-replication.html">mysql replication-主从复制</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/09/27/spring-init.html">spring mvc  DispatcherServlet ContextLoaderListener</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/09/20/linux-curl.html">linux curl 命令</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/09/01/nginx-ssl.html">blog 开启https </a></li><li class="navListItem"><a class="navItem" href="/blog/2016/08/29/java-design-patterns.html">java 设计模式总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/08/18/java-8.html">java 8 总结</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/07/26/tomcat-server-xml-conf.html">tomcat 配置</a></li><li class="navListItem"><a class="navItem" href="/blog/2016/05/28/linux-screen.html">linux screen</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2016/03/06/class-loader.html">java classloader</a></h1><p class="post-meta">March 6, 2016</p><div class="authorBlock"></div></header><div><span><h2><a class="anchor" aria-hidden="true" id="java-中类加载器的使用"></a><a href="#java-中类加载器的使用" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java 中类加载器的使用</h2>
+<p><a href="#1">1,类加载器</a></p>
+<p><a href="#2">2,类加载器的层次结构</a></p>
+<p><a href="#3">3,Class 对象的创建过程</a></p>
+<p><a href="#4">4,根据 java 规范（约定）编写自己的 ClassLoader</a></p>
+<p><a href="#5">5,对自己的<code>.class</code> 文件进行解密&amp;解密</a></p>
+<p><a href="#6">6,问题思考</a></p>
+<p><a href="#7">7,问题解决</a></p>
+<p><a href="#8">8,Java jni </a></p>
+<p><a href="#9">9,使用 c/c++编写实现自己的 ClassLoader</a></p>
+<p><a href="10">10,其他</a></p>
+<p>###1,类加载器</p>
+<ul>
+<li>引导类加载器 bootstrap</li>
+<li>扩展类加载器 extension</li>
+<li>应用程序类加载器（系统类加载器）System</li>
+<li>plugin 类加载器</li>
+</ul>
+<!--more-->
+<p>2,类加载器的层次结构</p>
+<h3></h3>
+<p><img src="http://i.imgur.com/l2Qgtuz.png" alt=""></p>
+<p>3,Class 对象的创建过程</p>
+<h3></h3>
+<ul>
+<li><code>.java</code> 文件-&gt; <code>.class</code> 文件</li>
+<li><code>.class</code> 文件 -&gt; <code>byte[]</code> 数组</li>
+<li><code>byte[]</code> -&gt; Clazz 对象</li>
+<li>Class.class.newInstance();</li>
+</ul>
+<blockquote>
+<p>一小段源码（来自 java.lang.ClassLoader）</p>
+</blockquote>
+<pre><code class="hljs css language-java">    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> Class&lt;?&gt; defineClass(String name, <span class="hljs-keyword">byte</span>[] b, <span class="hljs-keyword">int</span> off, <span class="hljs-keyword">int</span> len)
+        <span class="hljs-keyword">throws</span> ClassFormatError
+    {
+        <span class="hljs-keyword">return</span> defineClass(name, b, off, len, <span class="hljs-keyword">null</span>);
+    }
+</code></pre>
+<p>4,根据 java 规范（约定）编写自己的<code>ClassLoader</code></p>
+<h3></h3>
+<pre><code class="hljs css language-java">      <span class="hljs-comment">// 网络类加载器子类必须定义方法 findClass 和 loadClassData，以实现从网络加载类。</span>
+     <span class="hljs-comment">// 下载组成该类的字节后，它应该使用方法 defineClass 来创建类实例</span>
+     <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NetworkClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ClassLoader</span> </span>{
+             String host;
+             <span class="hljs-keyword">int</span> port;
+
+             <span class="hljs-function"><span class="hljs-keyword">public</span> Class <span class="hljs-title">findClass</span><span class="hljs-params">(String name)</span> </span>{
+                 <span class="hljs-keyword">byte</span>[] b = loadClassData(name);
+                 <span class="hljs-keyword">return</span> defineClass(name, b, <span class="hljs-number">0</span>, b.length);
+             }
+
+             <span class="hljs-keyword">private</span> <span class="hljs-keyword">byte</span>[] loadClassData(String name) {
+                 <span class="hljs-comment">// load the class data from the connection</span>
+                  . . .
+             }
+         }
+</code></pre>
+<p>5, 对自己的<code>.class</code> 文件进行解密&amp;解密</p>
+<h3></h3>
+<ul>
+<li>读取自己的 <code>.class</code> 文件</li>
+<li>byte[] readClassFile(String File)// 读取已经编译好的 class 文件</li>
+<li>byte[] newByte=EncryptClazz.encryptByte(data);// 加密</li>
+<li>使用自己的 MyClassLoader，读取加密后的文件</li>
+<li>byte[] newByte=EncryptClazz.encryptByte(data);// 解密</li>
+<li>Class&lt;?&gt; defineClass(String name, byte[] b, int off, int len) //生成 Class 对象</li>
+</ul>
+<p>6,问题思考</p>
+<h3></h3>
+<blockquote>
+<p>我们的代码最终会放到服务器上，进行运行,那么必须对我们的代码进行解密-&gt;运行</p>
+<p>如果用人通过一定手段，获取了你的加密算法，那么很容易对你的程序进行解密</p>
+<p>这时我们加密就没有意义了</p>
+<p>如上面 MyClassLoader 中会获取 解密后的 byte[] 数组，那么就可以把这个写入到文件</p>
+<p>这样就获得了源码。</p>
+</blockquote>
+<p>7,问题解决</p>
+<h3></h3>
+<ul>
+<li><p>对 3 中自定义的 MyClassLoader 进行优化</p></li>
+<li><p>读取自己的 <code>.class</code> 文件</p></li>
+<li><p>byte[] readClassFile(String File)// 读取已经编译好的 class 文件</p></li>
+<li><p>byte[] newByte=EncryptClazz.encryptByte(data);// 加密</p></li>
+<li><p>使用自己的 MyClassLoader，读取加密后的文件</p></li>
+</ul>
+<p>把这个</p>
+<blockquote>
+<p>byte[] newByte=EncryptClazz.encryptByte(data);// 解密</p>
+<p>Class&lt;?&gt; defineClass(String name, byte[] b, int off, int len) //生成 Class 对象</p>
+</blockquote>
+<p>变成</p>
+<blockquote>
+<p>Class&lt;?&gt; makeClass(byte[]);</p>
+</blockquote>
+<p>我们不再使用 jdk 中的 defineClass 创建 Class 对象 ，而是自己实现 Class 的创建
+这样对于 byte[] 对象的解密过程就隐藏起来了</p>
+<p>8,java jni</p>
+<h3></h3>
+<p>使用 java jni 技术，调用 c/c++ 方法，对 byte[] 进行解密，并创建 Class 对象，返还给 java 程序</p>
+<ul>
+<li>定义一个 native 方法</li>
+</ul>
+<blockquote>
+<p>private native Class&lt;?&gt; makeClass(String name, byte[] data);</p>
+</blockquote>
+<blockquote>
+<p>举个栗子，编写 native 方法，调用 c/c++ 方法</p>
+</blockquote>
+<pre><code class="hljs css language-java">    <span class="hljs-comment">// HelloWorld.java</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloWorld</span> </span>{
+
+        <span class="hljs-keyword">static</span> {
+            System.loadLibrary(<span class="hljs-string">"Hello"</span>);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayHello</span><span class="hljs-params">()</span></span>;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+
+            <span class="hljs-keyword">new</span> HelloWorld().DisplayHello();
+        }
+
+    }
+</code></pre>
+<blockquote>
+<p>javac HelloWorld.java</p>
+<p>javah HelloWorld</p>
+</blockquote>
+<pre><code class="hljs css language-c">    <span class="hljs-comment">// HelloWorld.h</span>
+    <span class="hljs-comment">/* DO NOT EDIT THIS FILE - it is machine generated */</span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;jni.h&gt;</span></span>
+    <span class="hljs-comment">/* Header for class HelloWorld */</span>
+
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">ifndef</span> _Included_HelloWorld</span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _Included_HelloWorld</span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+    <span class="hljs-keyword">extern</span> <span class="hljs-string">"C"</span> {
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+    <span class="hljs-comment">/*
+     * Class:     HelloWorld
+     * Method:    DisplayHello
+     * Signature: ()V
+     */</span>
+    <span class="hljs-function">JNIEXPORT <span class="hljs-keyword">void</span> JNICALL <span class="hljs-title">Java_HelloWorld_DisplayHello</span>
+      <span class="hljs-params">(JNIEnv *, jobject)</span></span>;
+
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+    }
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</code></pre>
+<blockquote>
+<p>根据 javah 生成的头文件，编写自己的 hello.cpp，编译-&gt; 生成 so 文件（可以理解问 java 的 jar）</p>
+</blockquote>
+<pre><code class="hljs css language-c">    <span class="hljs-comment">// hello.cpp</span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;jni.h&gt;</span></span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"HelloWorld.h"</span></span>
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+    <span class="hljs-function">JNIEXPORT <span class="hljs-keyword">void</span> JNICALL <span class="hljs-title">Java_HelloWorld_DisplayHello</span>
+    <span class="hljs-params">(JNIEnv *env, jobject obj)</span>
+    </span>{
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"From hello.cpp :"</span>);
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Hello world ! \n"</span>);
+                <span class="hljs-keyword">return</span>;
+    }
+</code></pre>
+<pre><code class="hljs css language-sh">    g++  -I/usr/<span class="hljs-built_in">local</span>/java/include -I/usr/<span class="hljs-built_in">local</span>/java/include/linux  -o libHello.so -g -shared -fPIC  hello.cpp
+
+    java -Djava.library.path=. HelloWorld
+</code></pre>
+<p>输出：</p>
+<blockquote>
+<p>From hello.cpp :Hello world !</p>
+</blockquote>
+<p>9, 使用 c/c++编写实现自己的 ClassLoader</p>
+<h3></h3>
+<blockquote>
+<p>未完待续...</p>
+<p>private native Class&lt;?&gt; makeClass(String name, byte[] data);</p>
+</blockquote>
+<blockquote>
+<p>jvm 源码 ClassLoader.c 中 有一个 Java_java_lang_ClassLoader_defineClass1 方法</p>
+<p>对应这 java ClassLoader 中</p>
+</blockquote>
+<blockquote>
+<p>from Java</p>
+</blockquote>
+<pre><code class="hljs css language-c++">    <span class="hljs-function"><span class="hljs-keyword">private</span> native Class <span class="hljs-title">defineClass1</span><span class="hljs-params">(String name, byte[] b, <span class="hljs-keyword">int</span> off, <span class="hljs-keyword">int</span> len, ProtectionDomain pd, String source, boolean verify)</span></span>;
+</code></pre>
+<blockquote>
+<p>jdk7 源码下载地址:<a href="https://jdk7.java.net/source.html">https://jdk7.java.net/source.html</a>
+hg 下载:<a href="http://hg.openjdk.java.net/jdk7u/jdk7u/">http://hg.openjdk.java.net/jdk7u/jdk7u/</a></p>
+<p>form C++</p>
+</blockquote>
+<pre><code class="hljs css language-c++">    <span class="hljs-function">JNIEXPORT jclass JNICALL
+    <span class="hljs-title">Java_java_lang_ClassLoader_defineClass1</span><span class="hljs-params">(JNIEnv *env,
+                                            jobject loader,
+                                            jstring name,
+                                            jbyteArray data,
+                                            jint offset,
+                                            jint length,
+                                            jobject pd,
+                                            jstring source)</span>
+</span></code></pre>
+<blockquote>
+<p>C++ 源码具体实现</p>
+</blockquote>
+<pre><code class="hljs css language-c++">    <span class="hljs-function">JNIEXPORT jclass JNICALL
+    <span class="hljs-title">Java_java_lang_ClassLoader_defineClass1</span><span class="hljs-params">(JNIEnv *env,
+                                            jobject loader,
+                                            jstring name,
+                                            jbyteArray data,
+                                            jint offset,
+                                            jint length,
+                                            jobject pd,
+                                            jstring source)</span>
+    </span>{
+        <span class="hljs-comment">// code ..</span>
+    }
+</code></pre>
+<p>10, 知识准备 Method.invoke 使用例子</p>
+<h3></h3>
+<pre><code class="hljs css language-java">        <span class="hljs-keyword">package</span> com.web.clazz;
+
+        <span class="hljs-keyword">import</span> java.lang.reflect.Method;
+
+        <span class="hljs-comment">/**
+         * Created by erbao.wang on 2016/3/8.
+         *
+         * <span class="hljs-doctag">@desc</span>
+         */</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ClazzMain</span> </span>{
+
+
+            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>{
+
+                ClassLoader myClassLoader = Thread.currentThread().getContextClassLoader();
+
+                Class clazz = myClassLoader.loadClass(<span class="hljs-string">"com.web.clazz.Demo"</span>);
+                Object obj = clazz.newInstance();
+
+                <span class="hljs-comment">// doSomeThing 方法是公用的，非静态方法，需要实例去调用</span>
+                Method methodDoSomeThing = clazz.getMethod(<span class="hljs-string">"doSomeThing"</span>, <span class="hljs-keyword">null</span>);
+
+                <span class="hljs-comment">//实例方法,需要类的实例对象，第一个参数不能为空</span>
+                methodDoSomeThing.invoke(obj, <span class="hljs-keyword">null</span>);
+
+
+                Method methodMain = clazz.getMethod(<span class="hljs-string">"main"</span>, <span class="hljs-keyword">new</span> Class[]{String[].class});
+                <span class="hljs-comment">// 静态方法,不需要类的实例对象，第一个参数可为空</span>
+                methodMain.invoke((Object) <span class="hljs-keyword">null</span>, (Object) <span class="hljs-keyword">null</span>);
+
+            }
+        }
+
+
+        <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> </span>{
+
+            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+                System.out.println(<span class="hljs-string">"main..."</span>);
+            }
+
+
+            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doSomeThing</span><span class="hljs-params">()</span> </span>{
+                System.out.println(<span class="hljs-string">"doSomeThing..."</span>);
+            }
+        }
+</code></pre>
+<blockquote>
+<p>输出结果</p>
+</blockquote>
+<pre><code class="hljs">doSomeThing...
+main...
+</code></pre>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#java-中类加载器的使用">java 中类加载器的使用</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/docusaurus.svg" alt="web1992&#x27;s blog" width="66" height="58"/></a><div><h5>Links</h5><a href="https://docusaurus.io/">docusaurus</a></div><div><h5>More</h5><a href="/blog">Blog</a><a href="https://github.com/web1992">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://docusaurus.io/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 京ICP备15055486号</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: 'a531c94473320aaf6ccf8924c4835d13',
+                indexName: 'web1992',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {}
+              });
+            </script></body></html>

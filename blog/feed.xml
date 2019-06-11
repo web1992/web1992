@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>web1992&apos;s blog Blog</title>
+        <link>https://your-docusaurus-test-site.com/blog</link>
+        <description>The best place to stay up-to-date with the latest web1992&apos;s blog news and events.</description>
+        <lastBuildDate>Tue, 11 Sep 2018 06:00:00 GMT</lastBuildDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <generator>Feed for Node.js</generator>
+        <image>
+            <title>web1992&apos;s blog Blog</title>
+            <url>https://your-docusaurus-test-site.com/img/docusaurus.svg</url>
+            <link>https://your-docusaurus-test-site.com/blog</link>
+        </image>
+        <copyright>Copyright © 2019 京ICP备15055486号</copyright>
+        <item>
+            <title><![CDATA[ThreadPoolExecutor 使用]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2018/09/11/thread-pool-executor.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2018/09/11/thread-pool-executor.html</guid>
+            <pubDate>Tue, 11 Sep 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="threadpoolexecutor"></a><a href="#threadpoolexecutor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>ThreadPoolExecutor</h1> <ul> <li><a href="https://github.com/web1992/read/blob/master/java/draw.io/ThreadPoolExecutor.xml">draw.io file</a></li> <li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html">from oracle</a></li> </ul> <h2><a class="anchor" aria-hidden="true" id="类图"></a><a href="#类图" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>类图</h2> <p><img src="/img/ThreadPoolExecutor.png" alt="ThreadPoolExecutor"></p> <h2><a class="anchor" aria-hidden="true" id="设计目的"></a><a href="#设计目的" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>设计目的</h2> <ul> <li>执行异步任务(主要)</li> <li>维护线程资源</li> <li>统计信息</li> </ul> <h2><a class="anchor" aria-hidden="true" id="core-and-maximum-pool-sizes"></a><a href="#core-and-maximum-pool-sizes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Core and maximum pool sizes</h2> <p>线程池大小策略</p> <ul> <li>当前线程数 &lt; <code>corePoolSize</code> # 创建新的线程</li> <li><code>corePoolSize</code> &lt; 当前线程数 &lt; <code>maximumPoolSize</code> &amp; queue.isFll # 创建新的线程</li> <li><code>corePoolSize</code> = <code>maximumPoolSi...</code></li></ul>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Map collections in java]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2018/07/16/java-collection-map.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2018/07/16/java-collection-map.html</guid>
+            <pubDate>Mon, 16 Jul 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="map"></a><a href="#map" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>map</h1> <ul> <li><a href="https://docs.oracle.com/javase/tutorial/collections/implementations/map.html">map (oracle doc)</a></li> </ul> <h2><a class="anchor" aria-hidden="true" id="概要"></a><a href="#概要" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>概要</h2> <p>Map 的集合实现可以分三类：</p> <ol> <li>普通的实现 <code>HashMap</code> <code>TreeMap</code> <code>LinkedHashMap</code></li> <li>特殊实现 <code>EnumMap</code> <code>WeakHashMap</code> <code>IdentityHashMap</code></li> <li><code>ConcurrentHashMap</code> 并发实现</li> </ol> <p><code>TreeMap</code> 可以保证放入<code>Map</code>的元素是有序的（key 自然顺序）,<code>HashMap</code>不保证顺序，但是性能比<code>TreeMap</code>好。</p> <p>如果你需要好的性能&amp;key 的插入顺序（这是是插入顺序，不是自然顺序），你可以...</p>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Checked vs Unchecked Exceptions in Java]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2017/11/23/checked-vs-unchecked-exceptions-in-java.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2017/11/23/checked-vs-unchecked-exceptions-in-java.html</guid>
+            <pubDate>Thu, 23 Nov 2017 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="checked-vs-unchecked-exceptions-in-java"></a><a href="#checked-vs-unchecked-exceptions-in-java" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Checked vs Unchecked Exceptions in Java</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[jvm 中文乱码的问题]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2017/11/09/jvm-file-encoding.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2017/11/09/jvm-file-encoding.html</guid>
+            <pubDate>Thu, 09 Nov 2017 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="jvm-中文乱码的问题"></a><a href="#jvm-中文乱码的问题" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>jvm 中文乱码的问题</h1>
+<p>一次项目发布之后，之前好好的 http 接口，报签名错误，经排查是中文乱码引起的，继续排查（已经沟通过没有人修改过服务的编码）</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[工程checkList]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2017/03/22/code-review.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2017/03/22/code-review.html</guid>
+            <pubDate>Wed, 22 Mar 2017 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>工程设计</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[我的2016]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2017/02/16/my-2016.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2017/02/16/my-2016.html</guid>
+            <pubDate>Thu, 16 Feb 2017 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="我的-2016"></a><a href="#我的-2016" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>我的 2016</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java SimpleDateFormat 线程不安全分析]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/12/29/java-SimpleDateFormat.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/12/29/java-SimpleDateFormat.html</guid>
+            <pubDate>Thu, 29 Dec 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java-simpledateformat-线程不安全分析"></a><a href="#java-simpledateformat-线程不安全分析" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java SimpleDateFormat 线程不安全分析</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java Condition]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/12/20/java-key-condition.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/12/20/java-key-condition.html</guid>
+            <pubDate>Tue, 20 Dec 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java-15-新的线程模型-condition-类分析"></a><a href="#java-15-新的线程模型-condition-类分析" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java 1.5 新的线程模型 <code>Condition</code> 类分析</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java jstack dump log 分析]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/12/16/java-jstack-dump.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/12/16/java-jstack-dump.html</guid>
+            <pubDate>Fri, 16 Dec 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java-jstack-dump-log-分析记录"></a><a href="#java-jstack-dump-log-分析记录" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java jstack dump log 分析记录</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java7-try-resource]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/12/14/java7-try-resource.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/12/14/java7-try-resource.html</guid>
+            <pubDate>Wed, 14 Dec 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java7-try-resource"></a><a href="#java7-try-resource" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java7-try-resource</h2>
+<p>java7 中新增了 try-resource 自动关闭资源的新特性</p>
+<p>在这里分析下,此特性的实现原理.</p>
+<p>有一个前提条件该类必须实现 <code>AutoCloseable</code> 接口的 close 方法</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java jdk]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/11/29/java-jdk.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/11/29/java-jdk.html</guid>
+            <pubDate>Tue, 29 Nov 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java-jdk-list"></a><a href="#java-jdk-list" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java jdk list</h2>
+<p>java jdk list</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[idea code 模板]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/11/03/idea-live-template.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/11/03/idea-live-template.html</guid>
+            <pubDate>Thu, 03 Nov 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="idea-code-live-template-模板"></a><a href="#idea-code-live-template-模板" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>idea</code> code live template 模板</h2>
+<p><code>idea</code> 自动生成<code>main</code>方法</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[mysql replication-主从复制]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/10/08/mysql-replication.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/10/08/mysql-replication.html</guid>
+            <pubDate>Sat, 08 Oct 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><code>mysql replication</code> mysql 的主从复制,本文使用<code>binary log</code>方式进行数据的复制.</p>
+<p>本文着重<code>mysql</code>主从（<code>master/slave</code>）的配置</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[spring mvc  DispatcherServlet ContextLoaderListener]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/09/27/spring-init.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/09/27/spring-init.html</guid>
+            <pubDate>Tue, 27 Sep 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<blockquote>
+<p><code>spring mvc</code> <code>DispatcherServlet</code> <code>ContextLoaderListener</code> 以及<code>Filter</code> 总结
+最近在使用<code>spring mvc</code> 进行 web 项目的开发
+以前只是会用，这次对使用中<code>疑惑的地方</code>进行下总结</p>
+</blockquote>
+<hr>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux curl 命令]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/09/20/linux-curl.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/09/20/linux-curl.html</guid>
+            <pubDate>Tue, 20 Sep 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="linux-curl-命令总结"></a><a href="#linux-curl-命令总结" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>linux</code> <code>curl</code> 命令总结</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[blog 开启https ]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/09/01/nginx-ssl.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/09/01/nginx-ssl.html</guid>
+            <pubDate>Thu, 01 Sep 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="blog-启用-https"></a><a href="#blog-启用-https" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>blog 启用 https</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java 设计模式总结]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/08/29/java-design-patterns.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/08/29/java-design-patterns.html</guid>
+            <pubDate>Mon, 29 Aug 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java-设计模式-总结"></a><a href="#java-设计模式-总结" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>java</code> <code>设计模式</code>总结</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java 8 总结]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/08/18/java-8.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/08/18/java-8.html</guid>
+            <pubDate>Thu, 18 Aug 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java8-总结"></a><a href="#java8-总结" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>java8</code> 总结</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[tomcat 配置]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/07/26/tomcat-server-xml-conf.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/07/26/tomcat-server-xml-conf.html</guid>
+            <pubDate>Tue, 26 Jul 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>tomcat conf/server.xml 配置demo</p>  <p>可以在 <host> 添加多个Context，配置多个服务</host></p> <pre><code class="hljs css language-xml"> <span class="hljs-tag">&lt;<span class="hljs-name">Context</span> <span class="hljs-attr">path</span>=<span class="hljs-string">"/app1"</span> <span class="hljs-attr">docBase</span>=<span class="hljs-string">"/data/www/app1.war"</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">Context</span> <span class="hljs-attr">path</span>=<span class="hljs-string">"/app2"</span> <span class="hljs-attr">docBase</span>=<span class="hljs-string">"/data/www/app2.war"</span> /&gt;</span> </code></pre> <blockquote> <p>可以通过</p> </blockquote> <blockquote> <p><a href="http://127.0.0.1:8080/app1">http://127.0.0.1:8080/app1</a></p> </blockquote> <blockquote> <p><a href="http://127.0.0.1:8080/app2">http://127.0.0.1:8080/app2</a></p> </blockquote> <blockquote> <p>进行访问</p> </blockquote> ]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux screen]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/05/28/linux-screen.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/05/28/linux-screen.html</guid>
+            <pubDate>Sat, 28 May 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>linux screen的使用</p>  <hr> <ul> <li><a href="http://www.cnblogs.com/mchina/archive/2013/01/30/2880680.html" title="使用技巧">screen使用技巧</a></li> <li><a href="http://www.linuxidc.com/Linux/2014-09/106217.htm" title="使用技巧">screen如何写日志</a></li> </ul> <p>sh 中使用screen</p> <pre><code class="hljs css language-sh"> <span class="hljs-comment">#!/bin/sh</span> <span class="hljs-built_in">echo</span> <span class="hljs-string">"run"</span> screen -dm <span class="hljs-built_in">test</span> &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">"test"</span> &gt;a.txt <span class="hljs-comment"># screen -r test 可以链接到此screen了</span> </code></pre> ]]></description>
+        </item>
+        <item>
+            <title><![CDATA[windows 常用命令]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/05/27/windows-cmd.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/05/27/windows-cmd.html</guid>
+            <pubDate>Fri, 27 May 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>windows 常用命令</p>  <pre><code class="hljs css language-bat"> netstat -ano |<span class="hljs-built_in">findstr</span> <span class="hljs-number">3306</span> tasklist tasklist |<span class="hljs-built_in">findstr</span> mysql <span class="hljs-built_in">taskkill</span> /T /F /PID <span class="hljs-number">6376</span> ## /T 所有子进程 ## /F 强制杀 ## 文件md5 certutil -hashfile filename MD5 </code></pre> ]]></description>
+        </item>
+        <item>
+            <title><![CDATA[redis]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/05/17/redis-xx.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/05/17/redis-xx.html</guid>
+            <pubDate>Tue, 17 May 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>####redis笔记</p> <p>xx</p>  <blockquote> <p>资料地址：<a href="http://www.yiibai.com/redis/redis_quick_guide.html">http://www.yiibai.com/redis/redis_quick_guide.html</a></p> </blockquote> ]]></description>
+        </item>
+        <item>
+            <title><![CDATA[nginx常用配置]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/04/14/nginx-conf.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/04/14/nginx-conf.html</guid>
+            <pubDate>Thu, 14 Apr 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>####nginx常用配置</p>  <blockquote> <p>负载+反向代理</p> </blockquote> <pre><code class="hljs css language-sh"> upstream www.web1992.cn { <span class="hljs-comment">#server 127.0.0.1:8081 max_fails=3;</span> server 127.0.0.1:4000 max_fails=3; } server { listen 80; server_name www.web1992.cn; location / { proxy_pass http://www.web1992.cn; proxy_set_header Host <span class="hljs-variable">$host</span>; p...</code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux shell with sql]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/04/13/linux-smart-shell.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/04/13/linux-smart-shell.html</guid>
+            <pubDate>Wed, 13 Apr 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>###撸下shell</p>  ```sh #!/bin/bash <pre><code class="hljs"> beginId=2006 ## 替换 replace(){ sed -i &quot;s/$1/$2/g&quot; $3; } ## 删除已有数据 delete(){ id=$1; sql=&quot;delete from dbName.t_table_info where id=$id&quot; echo $sql mysql -uroot -h127.0.0.1 -e &quot;$sql&quot; &gt;&gt; de...</code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux自动重启服务脚本]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/04/11/linux-shell.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/04/11/linux-shell.html</guid>
+            <pubDate>Mon, 11 Apr 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>###linux 自动重启服务命令</p>  ```sh #!/bin/bash pid=`ps aux |grep java |awk '{if($12=="-Dserver.name=game_server_s1") print $2}'` <pre><code class="hljs"> echo 'game_server_s1 is' $pid if [ &quot;$pid&quot; = &quot;&quot; ]; then echo &quot;no game server run.&quot; echo &quot;exit&qu...</code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[vim 插件]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/30/vim-plugin.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/30/vim-plugin.html</guid>
+            <pubDate>Wed, 30 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="vim-插件"></a><a href="#vim-插件" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>vim 插件</h2> <ul> <li><p>安装教程：<a href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a></p> <blockquote> <p>Vundle 是用来管理vim 的一个插件管的工具</p> </blockquote></li> <li><p>自动补全插件：<a href="https://github.com/Valloric/YouCompleteMe">https://github.com/Valloric/YouCompleteMe</a></p></li> </ul>  >下面的 Plugin 'tomasr/molokai' 可用通过 https://github.com/tomasr/molokai 获取 > >在github上面托管的代码，都有十分详细的安装教程 > <h2><a class="anchor" aria-hidden="true" id="vimrc配置"></a><a href="#vimrc配置" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>.vimrc配置</h2> <pre><code class="hljs css language-sh"> <span class="hljs-built_in">set</span> n...</code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[mysql修改表]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/30/mysql-alter-table.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/30/mysql-alter-table.html</guid>
+            <pubDate>Wed, 30 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="mysql-备忘"></a><a href="#mysql-备忘" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>mysql 备忘</h2>  <p>###mysql 表中使用存储过程添加新字段</p> <pre><code class="hljs css language-sql"> <span class="hljs-comment">-- 1, 注意SQL 语句开始处不要空格</span> <span class="hljs-comment">-- 2, 在使用 [--] 进行注释时，后面请加空格</span> <span class="hljs-keyword">SET</span> CHARACTER_SET_CLIENT=utf8; <span class="hljs-keyword">SET</span> CHARACTER_SET_CONNECTION=utf8; <span class="hljs-keyword">drop</span> <span class="hljs-keyword">procedure</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">exists</span> schema_change; delimiter ';;'; <span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> schema_change() <span class="hljs-keyword">begin</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">ex...</span></code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java i++ 与 ++i 的实现原理]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/28/java-i-iinr.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/28/java-i-iinr.html</guid>
+            <pubDate>Mon, 28 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="java-i-与-i-的实现原理"></a><a href="#java-i-与-i-的实现原理" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>java i++ 与 ++i 的实现原理</h1> <p>本文从 java 的字节码角度，去探索一下 i++ 与++i 的实现原理</p>  <h2><a class="anchor" aria-hidden="true" id="java-代码-1"></a><a href="#java-代码-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>java 代码 1</h2> <pre><code class="hljs css language-java"> <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>{ <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{ <span class="hljs-keyword">int</span> q = <span class="hljs-number">0</span>; q = q++; System.out.println(q); } </code></pre> <blockquote> <p>输出结果 0</p> </blockquote> <h2><a class="anchor" aria-hidden="true" id="java-代码-2"></a><a href="#java-代码-2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>java 代码 2</h2> <pre><code class="hljs css language-java"> <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>{ <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] ...</span></span></code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[resin host conf]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/16/resin-host-conf.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/16/resin-host-conf.html</guid>
+            <pubDate>Wed, 16 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h3><a class="anchor" aria-hidden="true" id="resin-host-配置"></a><a href="#resin-host-配置" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>resin host 配置</h3>  <pre><code class="hljs css language-xml"> <span class="hljs-comment">&lt;!-- host--&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">host</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"www.web1992.cn"</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">host-name</span>&gt;</span>www.web1992.cn<span class="hljs-tag">&lt;/<span class="hljs-name">host-name</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">host-alias</span>&gt;</span>gradle.web1992.cn<span class="hljs-tag">&lt;/<span class="hljs-name">host-alias</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">web-app</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"/"</span> <span class="hljs-attr">root-directory</span>=<span class="hljs-string">"/data/www/web1992/"</span>/&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">stdout-log</span> <span class="hljs-attr">pa...</span></span></code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Blog Title]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/11/blog-post.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/11/blog-post.html</guid>
+            <pubDate>Fri, 11 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum massa eget nulla aliquet sagittis. Proin odio tortor, vulputate ut odio in, ultrices ultricies augue. Cras ornare ultrices lorem malesuada iaculis. Etiam sit amet libero tempor, pulvinar mauris sed, sollicitudin sapien.</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java classloader]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/06/class-loader.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/06/class-loader.html</guid>
+            <pubDate>Sun, 06 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="java-中类加载器的使用"></a><a href="#java-中类加载器的使用" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>java 中类加载器的使用</h2> <p><a href="#1">1,类加载器</a></p> <p><a href="#2">2,类加载器的层次结构</a></p> <p><a href="#3">3,Class 对象的创建过程</a></p> <p><a href="#4">4,根据 java 规范（约定）编写自己的 ClassLoader</a></p> <p><a href="#5">5,对自己的<code>.class</code> 文件进行解密&amp;解密</a></p> <p><a href="#6">6,问题思考</a></p> <p><a href="#7">7,问题解决</a></p> <p><a href="#8">8,Java jni </a></p> <p><a href="#9">9,使用 c/c++编写实现自己的 ClassLoader</a></p> <p><a href="10">10,其他</a></p> <p>###1,类加载器</p> <ul> <li>引导类加载器 bootstrap</li> <li>扩展类加载器 extension</li> <li>应用程序类加载器（系统类加载器）System</li> <li>plugin 类加载...</li></ul>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[gradle useage memo]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/02/gradle-useage.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/02/gradle-useage.html</guid>
+            <pubDate>Wed, 02 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="gradle-用法备忘"></a><a href="#gradle-用法备忘" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>gradle 用法备忘</h1>
+<h2><a class="anchor" aria-hidden="true" id="生成-idea-和-eclipse-项目"></a><a href="#生成-idea-和-eclipse-项目" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>生成 idea 和 eclipse 项目</h2>
+<pre><code class="hljs css language-sh">gradle idea
+gradle eclipse
+</code></pre>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[mysqldump]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/03/02/mysqldump.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/03/02/mysqldump.html</guid>
+            <pubDate>Wed, 02 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="mysqldump-命令"></a><a href="#mysqldump-命令" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>mysqldump 命令</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux ftp上传文件脚本]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/26/linux-ftp.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/26/linux-ftp.html</guid>
+            <pubDate>Fri, 26 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="linux-ftp"></a><a href="#linux-ftp" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>linux ftp</h1>
+<p>把 /data/www/a.txt 文件上传到 ftp 指定目录下</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[python date demo]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/25/pyhon-date-demo.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/25/pyhon-date-demo.html</guid>
+            <pubDate>Thu, 25 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="python-日期格式化例子"></a><a href="#python-日期格式化例子" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>python</code> 日期格式化例子</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java reflect]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/24/java-reflect.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/24/java-reflect.html</guid>
+            <pubDate>Wed, 24 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="java-反射例子"></a><a href="#java-反射例子" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java 反射例子</h1>
+<p>一个 java 反射使用例子，备忘
+使用反射改变对象私有属性的值(spring IOC 就是通过类的反射技术，动态的注入属性的)</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java NumberFormat]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/22/java-numberformat.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/22/java-numberformat.html</guid>
+            <pubDate>Mon, 22 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="numberformat"></a><a href="#numberformat" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>NumberFormat</h1> <p>java 中处理小数技巧备忘<code>NumberFormat</code>函数方便的处理小数,位于 java.text 包下的工具类</p> <pre><code class="hljs css language-java"> NumberFormat num = NumberFormat.getPercentInstance(); num.setMaximumIntegerDigits(<span class="hljs-number">3</span>);<span class="hljs-comment">// 整数部分</span> num.setMaximumFractionDigits(<span class="hljs-number">2</span>); <span class="hljs-comment">// 小数部分</span> <span class="hljs-comment">// 格式化</span> String rate=num.format( <span class="hljs-number">2.0f</span> ); </code></pre> ]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux diff 命令]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/08/linux-diff-cmd.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/08/linux-diff-cmd.html</guid>
+            <pubDate>Mon, 08 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="linux-diff"></a><a href="#linux-diff" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>linux <code>diff</code></h1>
+<h2><a class="anchor" aria-hidden="true" id="man-diff-的文档帮助说明"></a><a href="#man-diff-的文档帮助说明" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>man diff 的文档帮助说明:</h2>
+<p>diff - compare files line by line (按照行来比较文件的不同)</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[使用 python 连接mysql 数据库]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/04/python-msqyl-connect.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/04/python-msqyl-connect.html</guid>
+            <pubDate>Thu, 04 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="使用-python-连接-mysql-数据库"></a><a href="#使用-python-连接-mysql-数据库" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>使用<code>python</code>连接<code>mysql</code>数据库</h2>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[使用 jekyll 搭建博客]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/02/03/build-blog-with-jekyll.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/02/03/build-blog-with-jekyll.html</guid>
+            <pubDate>Wed, 03 Feb 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="使用-jekyll-搭建博客"></a><a href="#使用-jekyll-搭建博客" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>使用 jekyll 搭建博客</h1>
+<p>本文不涉及具体的安装步骤，官网都有详细的步骤，这里只提供相关的安装技巧&amp;遇到问题的解决</p>
+<ul>
+<li><a href="http://jekyllrb.com/">jekyll 官网地址</a></li>
+<li><a href="http://jekyll.bootcss.com/">jekyll 中文官网地址</a></li>
+</ul>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[project develop summary]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2016/01/14/project-develop-summary.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2016/01/14/project-develop-summary.html</guid>
+            <pubDate>Thu, 14 Jan 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="项目开发总结"></a><a href="#项目开发总结" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>项目开发总结</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[mysql session character]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/30/mysql-session-character.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/30/mysql-session-character.html</guid>
+            <pubDate>Wed, 30 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="mysql-session-names"></a><a href="#mysql-session-names" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>mysql session names</h1>
+<p>mysql 解决中文乱码的问题</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[maven repository config (maven 的仓库配置)]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/26/maven-repository-conf.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/26/maven-repository-conf.html</guid>
+            <pubDate>Sat, 26 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="maven-的仓库配置"></a><a href="#maven-的仓库配置" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>maven 的仓库配置</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[ant jar依赖]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/22/ant-jar-dependence.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/22/ant-jar-dependence.html</guid>
+            <pubDate>Tue, 22 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="ant"></a><a href="#ant" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ant</h2>
+<p>ant jar (使用 ant 打包<code>java</code>项目为 jar 文件)</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[apache 通配符的使用]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/18/apache-wildcard-usegae.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/18/apache-wildcard-usegae.html</guid>
+            <pubDate>Fri, 18 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="apache-通配符的使用"></a><a href="#apache-通配符的使用" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>apache 通配符的使用</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[mysql APPARENT DEADLOCK（SQL Error: 1205, SQLState: 41000）错误]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/14/mysql-error-SQL-Error-1205-SQLState-41000.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/14/mysql-error-SQL-Error-1205-SQLState-41000.html</guid>
+            <pubDate>Mon, 14 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="mysql-错误排查"></a><a href="#mysql-错误排查" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>mysql 错误排查</h1>
+<p>今天在使用程序连接 <code>mysql</code> 出现如下的错误（上午还可以使用，下午就出问题了）</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Linux 批量处理文件]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/14/linux-sh-grep-file-with-one-cmd.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/14/linux-sh-grep-file-with-one-cmd.html</guid>
+            <pubDate>Mon, 14 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h2><a class="anchor" aria-hidden="true" id="awk-grep-ls"></a><a href="#awk-grep-ls" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>awk grep ls</h2>
+<p><code>linux</code> 一条命令匹配 <code>/data/</code> 目录下的所有文件，
+查找文件中以 insert 开头的行，并保存内容到 <code>旧文件名+.txt</code> 文件中</p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[java sh启动脚本]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/05/linux-java-sh.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/05/linux-java-sh.html</guid>
+            <pubDate>Sat, 05 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="java-shell-启动脚本"></a><a href="#java-shell-启动脚本" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>java</code>shell 启动脚本</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[linux grep cat 查找命令]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/04/linux-find-grep.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/04/linux-find-grep.html</guid>
+            <pubDate>Fri, 04 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="linux-grep-find"></a><a href="#linux-grep-find" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>linux grep find</h1>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Git 常用的命令]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/12/02/git-add-remote-config.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/12/02/git-add-remote-config.html</guid>
+            <pubDate>Wed, 02 Dec 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<h1><a class="anchor" aria-hidden="true" id="git-常用的命令"></a><a href="#git-常用的命令" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Git 常用的命令</h1> <h2><a class="anchor" aria-hidden="true" id="create-a-new-repository"></a><a href="#create-a-new-repository" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>create a new repository</h2> <pre><code class="hljs css language-sh"> <span class="hljs-built_in">echo</span> blog &gt;&gt; README.md git init git add README.md git commit -m <span class="hljs-string">"first commit"</span> git remote add origin git@github.com:web1992/blog.git git push -u origin master </code></pre> <h2><a class="anchor" aria-hidden="true" id="push-an-existing-repository"></a><a href="#push-an-existing-repository" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>push an existing repository</h2> <pre><code class="hljs css language-sh"> git remote add origi...</code></pre>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[三省]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/11/22/every-day.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/11/22/every-day.html</guid>
+            <pubDate>Sun, 22 Nov 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<ul> <li><p>专注眼下</p></li> <li><p>思考力与推动力</p></li> <li><p>Never Say No</p></li> <li><p>投资未来</p></li> <li><p>善用工具</p></li> <li><p>管理时间</p></li> <li><p>别人雇佣你，是让你创造价值，而不是编程</p></li> <li><p>人生没什么经验，再怎么反省，都想不通透。这就像手边没料，冰箱里只有蛋和米饭，你怎么弄，都是蛋炒饭。 若是手中多了一把葱，看来就有点竞争力。再来一罐干贝酱？十只虾？两斤牛肉？一盒咖喱块？ 等咖喱块入手，你或许会把蛋和虾扔到一旁，改做咖喱牛肉饭。你变化的空间就大了。 但没有料，只有食谱，就是干瞪眼。你得出去闯闯，找到自己的料，拓展人生的可能性。 可长辈不都说要追求平稳的生活吗？...</p></li></ul>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Welcome to Jekyll!]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/11/20/welcome-to-jekyll.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/11/20/welcome-to-jekyll.html</guid>
+            <pubDate>Fri, 20 Nov 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>You’ll find this post in your <code>_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code>jekyll serve</code>, which launches a web server and auto-rege...</p>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Hello, Jekyll and QckTheme]]></title>
+            <link>https://your-docusaurus-test-site.com/blog/2015/01/01/hello.html</link>
+            <guid>https://your-docusaurus-test-site.com/blog/2015/01/01/hello.html</guid>
+            <pubDate>Thu, 01 Jan 2015 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>You can use most of standard Markdown features.</p> <h2><a class="anchor" aria-hidden="true" id="list"></a><a href="#list" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>List</h2> <ul> <li>foo</li> <li>bar <ul> <li>indentation <ul> <li>nesting indentation</li> </ul></li> <li>indentation</li> </ul></li> <li>buz</li> </ul>  <h2><a class="anchor" aria-hidden="true" id="quote"></a><a href="#quote" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Quote</h2> <blockquote> <p>quote</p> <blockquote> <p>nesting quote</p> </blockquote> <p>quote</p> </blockquote> <h2><a class="anchor" aria-hidden="true" id="strikethrough"></a><a href="#strikethrough" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Strikethrough</h2> <p><del>Mistaken text.</del></p> <h2><a class="anchor" aria-hidden="true" id="syntax-highlighting"></a><a href="#syntax-highlighting" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Syntax highlighting</h2> <pre><code class="hljs css language-php"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> <span class="hljs-string">'Hello, World!'</span>; </code></pre> <h2><a class="anchor" aria-hidden="true" id="tables"></a><a href="#tables" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Tables</h2> <table> <thead> <tr><th>First He...</th></tr></thead></table>]]></description>
+        </item>
+    </channel>
+</rss>
